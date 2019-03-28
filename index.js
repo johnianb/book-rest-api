@@ -70,7 +70,7 @@ app.post('/add-book/', (req, res) => {
         year: req.body.year ? req.body.year : null,
         author: req.body.author ? req.body.author : null,
         description: req.body.description ? req.body.description : ' ',
-        image: req.body.image ? req.body.image : ' '
+        image: req.body.image ? req.body.image
     };
 
     book.create(value)
