@@ -2,6 +2,10 @@
 const express = require('express');
 const Sequelize = require('sequelize');
 const app = express();
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const sequelize = new Sequelize('library_dev', 'root', 'toor', {
     host: 'localhost',
@@ -53,7 +57,33 @@ app.get('/', (req, res) => {
 app.get('/book/', (req, res) => {
     book.findAll().then(book => {
         res.json(book)
-    })
-})
+    });
+});
+
+// Request endpoint to create book record
+app.post('/add-book/', (req, res) => {
+
+    // Request parameters 
+    const value = {
+        isbn: req.body.isbn ? req.body.isbn : null,
+        name: req.body.name,
+        year: req.body.year ? req.body.year : null,
+        author: req.body.author ? req.body.author : null,
+        description: req.body.description ? req.body.description : ' ',
+        image: req.body.image ? req.body.image : ' '
+    };
+
+    book.create(value)
+        .then((book) => {
+            console.log('book ::', book);
+            return res.json({result: book.dataValues});
+        })
+        .catch((err) => {
+            // console.log(err);
+            return res.json({error: err});
+        });
+    
+});
+
 
 app.listen(3000, () => console.log("server library http://localhost:3000"))
